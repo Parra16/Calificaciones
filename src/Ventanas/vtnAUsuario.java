@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package escuela.proyect;
+package Ventanas;
 
+import Objetos.Usuario;
+import Conexion.Conexiones;
 import cjb.ci.Validaciones;
 import java.sql.Connection;
 import java.sql.Date;
@@ -46,7 +48,8 @@ public class vtnAUsuario extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txtsemestre = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Login");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Bienvenido");

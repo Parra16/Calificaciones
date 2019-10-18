@@ -296,8 +296,6 @@ public class vtnPrincipal extends javax.swing.JFrame {
         } else {
             btnnuevo.setText("Nuevo " + jctipo.getSelectedItem());
         }
-
-        //jtabla.setModel(modelo);
         switch (jctipo.getSelectedIndex()) {
             case 1:
                 modelo.setRowCount(0);
@@ -457,12 +455,10 @@ public class vtnPrincipal extends javax.swing.JFrame {
                 Object[] filas = new Object[cantcolumnas];
 
                 for (int i = 0; i < cantcolumnas; i++) {
-                    System.out.println("entro filassss");
                     filas[i] = rs.getObject(i + 1);
                 }
                 modelo.addRow(filas);
             }
-
         } catch (SQLException e) {
             System.out.println(e.toString());
         }

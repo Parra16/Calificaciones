@@ -1,4 +1,4 @@
-package escuela.proyect;
+package Conexion;
 
 
 import java.sql.Connection;
@@ -60,36 +60,5 @@ public class Conexiones {
     
     public void desconectar(Connection con) throws SQLException{
         con.close();
-    }
-    
-    public static boolean consultalogin(String usuario, String contra){
-        Connection con = conectar();
-        PreparedStatement ps;
-        ResultSet rs;
-        try{
-            con = Conexiones.conectar();
-            ps = con.prepareStatement("SELECT usuario,contrasenia FROM cat_usuario WHERE bactive = ? AND usuario = ? AND contrasenia = ?"); //traer un dato
-            ps.setBoolean(1, true);
-            ps.setString(2, usuario);
-            ps.setString(3, contra);
-            
-            rs= ps.executeQuery();
-            if (rs.next()) {
-                return true;
-            }else{
-                JOptionPane.showConfirmDialog(null,"No se encontro el registro");
-                
-            }
-        }catch(Exception e){
-            
-            System.out.println(e.toString());
-        }
-        return false;
-    }
-    
-    
-  
-        
-    
-    
+    }    
 }

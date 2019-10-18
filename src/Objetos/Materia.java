@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package escuela.proyect;
+package Objetos;
 
 /**
  *
@@ -15,20 +15,25 @@ public class Materia {
     private String observaciones;
     private String abreviatura;
     private String profesor;
-    private int estado;
     private int creditos;
     private boolean bactive;
 
-    public Materia(int id, String nombre, String observaciones, String abreviatura, String profesor, int estado, int creditos, boolean bactive) {
+    public Materia(int id, String nombre, String observaciones, String abreviatura, String profesor,int creditos, boolean bactive) {
         this.id = id;
         this.nombre = nombre;
         this.observaciones = observaciones;
         this.abreviatura = abreviatura;
         this.profesor = profesor;
-        this.estado = estado;
         this.creditos = creditos;
         this.bactive= bactive;
     }
+
+    public Materia(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -68,14 +73,6 @@ public class Materia {
 
     public void setProfesor(String profesor) {
         this.profesor = profesor;
-    }
-
-    public int getEstado() {
-        return estado;
-    }
-
-    public void setEstado(int estado) {
-        this.estado = estado;
     }
 
     public int getCreditos() {

@@ -3,9 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package escuela.proyect;
+package Ventanas;
 
+import Conexion.Conexiones;
+import static Conexion.Conexiones.conectar;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,7 +19,8 @@ import java.sql.Connection;
 public class vtnLogin extends javax.swing.JFrame {
 
     
-        public static String usuario ;
+        public static String usuario;
+        public static int id;
     /**
      * Creates new form vtnLogin
      */
@@ -110,12 +116,38 @@ public class vtnLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnentrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnentrarActionPerformed
-        Connection con = Conexiones.conectar();
-        if (Conexiones.consultalogin(txtusuario.getText(), txtcontra.getText())) {
-            System.out.println("ahuevo PRRO, ahorita vemos que pedo");
-            usuario=txtusuario.getText();
-            new vtnPrincipal().setVisible(true);
+        Connection con = conectar();
+        PreparedStatement ps;
+        ResultSet rs;
+        try{
+            con = Conexiones.conectar();
+            ps = con.prepareStatement("SELECT id_usuario,usuario,contrasenia FROM cat_usuario WHERE bactive = ? AND usuario = ? AND contrasenia = ?"); //traer un dato
+            ps.setBoolean(1, true);
+            ps.setString(2, txtusuario.getText());
+            ps.setString(3, txtcontra.getText());
+            
+            rs= ps.executeQuery();
+            if (rs.next()) {
+                id=rs.getInt("id_usuario");
+                new vtnPrincipal().setVisible(true);
+                System.out.println(rs.getInt("id_usuario"));
+                this.dispose();
+            }else{
+                JOptionPane.showConfirmDialog(null,"No se encontro el registro");
+                
+            }
+        }catch(Exception e){
+            
+            System.out.println(e.toString());
         }
+
+//        Connection con = Conexiones.conectar();
+//        if (Conexiones.consultalogin(txtusuario.getText(), txtcontra.getText())) {
+//            System.out.println("ahuevo PRRO, ahorita vemos que pedo");
+//            usuario=txtusuario.getText();
+//            new vtnPrincipal().setVisible(true);
+//            this.dispose();
+//        }
     }//GEN-LAST:event_btnentrarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
