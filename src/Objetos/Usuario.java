@@ -13,15 +13,29 @@ public class Usuario {
     private int id;
     private String usuario;
     private String contrasenia;
-    private int semestre;
+    private String semestre_actual;
     private boolean bactive ;
     private String correo;
+    private int idcarrera;
+    private int tipo_usuario;
 
-    public Usuario(int id, String usuario, String contrasenia, int semestre,String correo) {
+    public Usuario(int id, String usuario, String contrasenia, String semestre_actual, String correo, int idcarrera) {
         this.id = id;
         this.usuario = usuario;
         this.contrasenia = contrasenia;
-        this.semestre = semestre;
+        this.semestre_actual = semestre_actual;
+        this.correo = correo;
+        this.idcarrera = idcarrera;
+    }
+    
+
+    
+    
+    public Usuario(int id, String usuario, String contrasenia, String semestre,String correo) {
+        this.id = id;
+        this.usuario = usuario;
+        this.contrasenia = contrasenia;
+        this.semestre_actual = semestre;
         this.bactive=true;
         this.correo=correo;
     }
@@ -50,12 +64,12 @@ public class Usuario {
         this.contrasenia = contrasenia;
     }
 
-    public int getSemestre() {
-        return semestre;
+    public String getSemestre() {
+        return semestre_actual;
     }
 
-    public void setSemestre(int semestre) {
-        this.semestre = semestre;
+    public void setSemestre(String semestre) {
+        this.semestre_actual = semestre;
     }
 
     public boolean isBactive() {
@@ -72,6 +86,22 @@ public class Usuario {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public int getIdcarrera() {
+        return idcarrera;
+    }
+
+    public void setIdcarrera(int idcarrera) {
+        this.idcarrera = idcarrera;
+    }
+
+    public int getTipo_usuario() {
+        return tipo_usuario;
+    }
+
+    public void setTipo_usuario(int tipo_usuario) {
+        this.tipo_usuario = tipo_usuario;
     }
     
     

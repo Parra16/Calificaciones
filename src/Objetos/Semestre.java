@@ -10,25 +10,25 @@ package Objetos;
  * @author PARRA
  */
 public class Semestre {
-    private int semestre ;
+    private String semestre ;
     private int id;
 
 
-    public Semestre(int semestre, int id) {
+    public Semestre(String semestre, int id) {
         this.semestre = semestre;
         this.id = id;
         
     }
 
-    public Semestre(int semestre, boolean bactive) {
+    public Semestre(String semestre, boolean bactive) {
         this.semestre = semestre;
     }
 
-    public int getSemestre() {
+    public String getSemestre() {
         return semestre;
     }
 
-    public void setSemestre(int semestre) {
+    public void setSemestre(String semestre) {
         this.semestre = semestre;
     }
 

@@ -7,10 +7,13 @@ package Ventanas;
 
 import Conexion.Conexiones;
 import Objetos.Año;
+import Objetos.Carrera;
 import Objetos.Materia;
 import Objetos.Periodo;
 import Objetos.Semestre;
+import Objetos.Usuario;
 import cjb.ci.Mensaje;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,21 +28,25 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author PARRA
  */
-public class vtnAMateria extends javax.swing.JFrame {
+public class vtnAMateria extends javax.swing.JFrame
+{
 
     /**
      * Creates new form vtnAMateria
      */
-    public vtnAMateria() {
+    public vtnAMateria()
+    {
         initComponents();
-
+        this.getContentPane().setBackground(Color.WHITE);
+        this.setResizable(false);
     }
     static ArrayList<Año> anio = new ArrayList<Año>();
     static ArrayList<Periodo> periodo = new ArrayList<Periodo>();
     static ArrayList<Semestre> semestre = new ArrayList<Semestre>();
     static ArrayList<Materia> materia = new ArrayList<Materia>();
-
-    static DefaultTableModel modelo2;
+    static ArrayList<Carrera> carrera = new ArrayList<Carrera>();
+    
+    static DefaultTableModel modelo;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -51,13 +58,6 @@ public class vtnAMateria extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jcmateria = new javax.swing.JComboBox<>();
-        btnguardareticula = new javax.swing.JButton();
-        txtsemestre = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         txtnommateria = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -95,81 +95,46 @@ public class vtnAMateria extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Altas");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
 
-        jLabel3.setText("Semestre");
+        jPanel1.setBackground(new java.awt.Color(204, 204, 255));
 
-        jLabel10.setText("Materia");
+        txtnommateria.setBackground(new java.awt.Color(255, 255, 204));
 
-        jcmateria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        btnguardareticula.setText("Guardar");
-        btnguardareticula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnguardareticulaActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel3))
-                        .addGap(60, 60, 60)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtsemestre, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jcmateria, javax.swing.GroupLayout.Alignment.LEADING, 0, 77, Short.MAX_VALUE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(102, 102, 102)
-                        .addComponent(btnguardareticula, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(289, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(202, 202, 202)
-                        .addComponent(jLabel13))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtsemestre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(jcmateria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(13, 13, 13)
-                .addComponent(btnguardareticula, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(166, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Reticula", jPanel3);
-
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("Materia");
 
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel2.setText("Nombre");
 
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel4.setText("Abreviacion");
 
+        txtabreviacion.setBackground(new java.awt.Color(255, 255, 204));
+
+        txtcreditos.setBackground(new java.awt.Color(255, 255, 204));
+
+        txtprofesor.setBackground(new java.awt.Color(255, 255, 204));
+
+        txtobservaciones.setBackground(new java.awt.Color(255, 255, 204));
         txtobservaciones.setColumns(20);
         txtobservaciones.setRows(5);
         jScrollPane2.setViewportView(txtobservaciones);
 
+        btnlimpiar.setBackground(new java.awt.Color(51, 51, 0));
+        btnlimpiar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnlimpiar.setForeground(new java.awt.Color(255, 255, 255));
         btnlimpiar.setText("Limpiar");
 
+        btnguardarmateria.setBackground(new java.awt.Color(51, 51, 0));
+        btnguardarmateria.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnguardarmateria.setForeground(new java.awt.Color(255, 255, 255));
         btnguardarmateria.setText("Guardar");
         btnguardarmateria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -177,10 +142,13 @@ public class vtnAMateria extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel7.setText("Observaciones");
 
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel6.setText("Profesor");
 
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel5.setText("Creditos");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -191,11 +159,9 @@ public class vtnAMateria extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
                         .addComponent(btnguardarmateria)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnlimpiar)
-                        .addGap(42, 42, 42))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnlimpiar))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
@@ -212,16 +178,16 @@ public class vtnAMateria extends javax.swing.JFrame {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(469, 469, 469))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(147, 147, 147)
+                .addGap(230, 230, 230)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(15, 15, 15)
                 .addComponent(jLabel1)
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtnommateria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -245,7 +211,7 @@ public class vtnAMateria extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnguardarmateria)
                     .addComponent(btnlimpiar))
@@ -254,10 +220,17 @@ public class vtnAMateria extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Materias", jPanel1);
 
+        jPanel2.setBackground(new java.awt.Color(204, 204, 255));
+
+        jLabel8.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel8.setText("Numero");
 
+        jLabel14.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel14.setText("Semestre");
 
+        btnguardarsemestre.setBackground(new java.awt.Color(51, 51, 0));
+        btnguardarsemestre.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnguardarsemestre.setForeground(new java.awt.Color(255, 255, 255));
         btnguardarsemestre.setText("Guardar");
         btnguardarsemestre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -265,20 +238,35 @@ public class vtnAMateria extends javax.swing.JFrame {
             }
         });
 
+        btnlimpiar1.setBackground(new java.awt.Color(51, 51, 0));
+        btnlimpiar1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnlimpiar1.setForeground(new java.awt.Color(255, 255, 255));
         btnlimpiar1.setText("Limpiar");
 
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel9.setText("Periodo");
 
+        jcperiodo.setBackground(new java.awt.Color(51, 51, 0));
+        jcperiodo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jcperiodo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jLabel11.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel11.setText("Año");
 
+        jcanio.setBackground(new java.awt.Color(51, 51, 0));
+        jcanio.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jcanio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jLabel15.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel15.setText("Dar opcion entre elegir un registro o hacer uno nuevo");
 
+        jcsemestre.setBackground(new java.awt.Color(51, 51, 0));
+        jcsemestre.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jcsemestre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jButton1.setBackground(new java.awt.Color(51, 51, 0));
+        jButton1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("jButton1");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -291,77 +279,68 @@ public class vtnAMateria extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(btnguardarsemestre)
-                .addGap(54, 54, 54)
-                .addComponent(btnlimpiar1)
-                .addGap(93, 93, 93)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel8))
-                .addGap(41, 41, 41)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jcanio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36))
+                        .addGap(212, 212, 212)
+                        .addComponent(jLabel14))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(107, 107, 107)
+                                .addComponent(btnguardarsemestre)
+                                .addGap(18, 18, 18))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(41, 41, 41)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jcanio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jcperiodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jcsemestre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(153, 153, 153)
-                    .addComponent(jLabel14)
-                    .addContainerGap(352, Short.MAX_VALUE)))
+                            .addComponent(jcsemestre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(btnlimpiar1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton1))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(jcanio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)))
+                .addGap(21, 21, 21)
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcanio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
+                .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(jcperiodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jcsemestre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnguardarsemestre)
-                            .addComponent(btnlimpiar1)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(jButton1)))
-                .addContainerGap(180, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(22, 22, 22)
-                    .addComponent(jLabel14)
-                    .addContainerGap(392, Short.MAX_VALUE)))
+                .addGap(43, 43, 43)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnlimpiar1)
+                    .addComponent(btnguardarsemestre)
+                    .addComponent(jButton1))
+                .addGap(92, 92, 92))
         );
 
         jTabbedPane1.addTab("Semestre", jPanel2);
 
+        jPanel4.setBackground(new java.awt.Color(204, 204, 255));
+
+        jtmateria.setBackground(new java.awt.Color(153, 153, 0));
         jtmateria.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -387,6 +366,9 @@ public class vtnAMateria extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jtmateria);
 
+        btnguardasemmat.setBackground(new java.awt.Color(51, 51, 0));
+        btnguardasemmat.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnguardasemmat.setForeground(new java.awt.Color(255, 255, 255));
         btnguardasemmat.setText("Guardar");
         btnguardasemmat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -394,41 +376,50 @@ public class vtnAMateria extends javax.swing.JFrame {
             }
         });
 
+        jcsemestremat.setBackground(new java.awt.Color(51, 51, 0));
+        jcsemestremat.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jcsemestremat.setForeground(new java.awt.Color(255, 255, 255));
         jcsemestremat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcsemestremat.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jcsemestrematItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(70, Short.MAX_VALUE)
+                .addGap(228, 228, 228)
+                .addComponent(jcsemestremat, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 231, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(btnguardasemmat)
                         .addGap(231, 231, 231))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28))))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(228, 228, 228)
-                .addComponent(jcsemestremat, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(49, 49, 49))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jcsemestremat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(btnguardasemmat)
                 .addGap(33, 33, 33))
         );
 
         jTabbedPane1.addTab("Ingresa Materias", jPanel4);
 
-        jLabel12.setText("Materia");
+        jLabel12.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel12.setText("Altas");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -437,32 +428,219 @@ public class vtnAMateria extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(155, 155, 155)
+                        .addGap(315, 315, 315)
                         .addComponent(jLabel12))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
+                        .addGap(77, 77, 77)
                         .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel12)
-                .addGap(21, 21, 21)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        cargaMateria();
+        cargaAnio();
+        cargaPeriodo();
+        CrearModelo2();
+        cargasemestre();
+        cargactrlSemestre();
+        actualizatabla();
+        PreparedStatement ps = null;
+        ResultSet rs;
+        Connection con = Conexiones.conectar();
+        
+        try
+        {
+            String sql = "Select nombre,abreviatura,profesor,creditos,observaciones FROM cat_materia";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            
+            ResultSetMetaData rrsw = rs.getMetaData();
+            int cantcolumnas = rrsw.getColumnCount();
+            
+            while (rs.next())
+            {
+                
+                Object[] filas = new Object[cantcolumnas];
+                
+                for (int i = 0; i < cantcolumnas; i++)
+                {
+                    filas[i] = rs.getObject(i + 1);
+                }
+                modelo.addRow(filas);
+            }
+            
+            int tamanio = jtmateria.getModel().getRowCount();
+            for (int i = 0; i < tamanio; i++)
+            {
+                jtmateria.getModel().setValueAt(false, i, 5);
+            }
+            
+        } catch (SQLException e)
+        {
+            System.out.println(e.toString());
+        }
+        
+
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jcsemestrematItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcsemestrematItemStateChanged
+        
+        PreparedStatement ps = null;
+        ResultSet rs;
+        Connection con = Conexiones.conectar();
+        modelo.setRowCount(0);
+        try
+        {
+            String sql = "Select nombre,creditos FROM cat_materia inner join reticula on cat_materia.id_materia = reticula.id_materia where id_semestre=?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, extraeid(String.valueOf(jcsemestremat.getSelectedItem()), 3));
+            rs = ps.executeQuery();
+            
+            ResultSetMetaData rrsw = rs.getMetaData();
+            int cantcolumnas = rrsw.getColumnCount();
+            
+            while (rs.next())
+            {
+                
+                Object[] filas = new Object[cantcolumnas];
+                
+                for (int i = 0; i < cantcolumnas; i++)
+                {
+                    filas[i] = rs.getObject(i + 1);
+                }
+                modelo.addRow(filas);
+            }
+            
+            int tamanio = jtmateria.getModel().getRowCount();
+            for (int i = 0; i < tamanio; i++)
+            {
+                jtmateria.getModel().setValueAt(false, i, 2);
+            }
+            
+        } catch (SQLException e)
+        {
+            System.out.println(e.toString());
+        }
+    }//GEN-LAST:event_jcsemestrematItemStateChanged
+
+    private void btnguardasemmatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardasemmatActionPerformed
+        int id_ctrlsemestre = -1;
+        //        System.out.println(String.valueOf(jtmateria.getModel().getValueAt(1, 5)));
+        //        System.out.println(jtmateria.getModel().getRowCount());
+        int tamanio = jtmateria.getModel().getRowCount();
+        
+        if (tamanio == 0)
+        {
+            Mensaje.error(this, "No se encuentran datos");
+        } else
+        {
+            try
+            {
+                for (int i = 0; i < tamanio; i++)
+                {
+                    if ((Boolean) jtmateria.getModel().getValueAt(i, 2))
+                    {
+                        PreparedStatement ps;
+                        ResultSet rs;
+                        
+                        Connection con = Conexiones.conectar();
+                        ps = con.prepareStatement("SELECT id_ctrlsemestre FROM ctrl_semestre WHERE id_semestre = ? && id_usuario=?");
+                        ps.setInt(1, extraeid(String.valueOf(jcsemestremat.getSelectedItem()), 3));
+                        ps.setInt(2, vtnLogin.id);
+                        rs = ps.executeQuery();
+                        if (rs.next())
+                        {
+                            id_ctrlsemestre = rs.getInt("id_ctrlsemestre");
+                            System.out.println(id_ctrlsemestre);
+                            //System.out.println("ID CTRLSEMESTRE" + x);
+                        }
+                        
+                        ps = vtnPrincipal.con.prepareStatement("INSERT INTO ctrl_semestremateria  (id_ctrlsemestre,id_materia,parcial1,parcial2,ordinario"
+                                + ",extra,titulo,tipo_aprovacion,bactive) VALUES (?,?,?,?,?,?,?,?,?)");//por seguridad
+                        ps.setInt(1, id_ctrlsemestre);
+                        System.out.println("RETORNO DE MATERIA" + extraeid(String.valueOf(jtmateria.getModel().getValueAt(i, 0)), 4));
+                        ps.setInt(2, extraeid(String.valueOf(jtmateria.getModel().getValueAt(i, 0)), 4));
+                        ps.setInt(3, 0);
+                        ps.setInt(4, 0);
+                        ps.setInt(5, 0);
+                        ps.setInt(6, 0);
+                        ps.setInt(7, 0);
+                        ps.setInt(8, 1);
+                        ps.setBoolean(9, true);
+                        int res = ps.executeUpdate();
+                        
+                    }
+                }
+                Mensaje.exito(this, "Semestre Generado");
+                //vtnPrincipal.con.close();
+            } catch (Exception e)
+            {
+                System.out.println("erororores" + e.toString());
+            }
+        }
+        cargactrlSemestre();
+    }//GEN-LAST:event_btnguardasemmatActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        System.out.println(String.valueOf(jtmateria.getModel().getValueAt(0, 0)));
+        System.out.println(extraeid(String.valueOf(jtmateria.getModel().getValueAt(0, 0)), 4));
+        //System.out.println(extraeid(String.valueOf(jcsemestre.getSelectedItem()), 3));
+        //        System.out.println("IDUSUARIO" + vtnLogin.id);
+        //        for (int i = 0; i < materia.size(); i++) {
+        //            System.out.println("ID: " + materia.get(i).getId() + "\nNOMBRE: " + materia.get(i).getNombre());
+        //        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnguardarsemestreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarsemestreActionPerformed
+        Connection con = Conexiones.conectar();
+        PreparedStatement ps;
+        ResultSet rs;
+        try
+        {
+            ps = con.prepareStatement("INSERT INTO ctrl_semestre (id_periodo,id_anio,id_usuario,id_semestre,bactive) VALUES (?,?,?,?,?)");//por seguridad
+            ps.setInt(1, periodo.get(jcperiodo.getSelectedIndex()).getId());
+            ps.setInt(2, extraeid(String.valueOf(jcanio.getSelectedItem()), 1));
+            ps.setInt(3, vtnLogin.id);
+            ps.setInt(4, extraeid(String.valueOf(jcsemestre.getSelectedItem()), 3));
+            ps.setBoolean(5, true);
+            
+            int res = ps.executeUpdate();
+            if (res > 0)
+            {
+                JOptionPane.showMessageDialog(null, "Se registro exitosamente");
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "ERROR");
+            }
+            con.close();
+        } catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
+        cargactrlSemestre();
+        
+    }//GEN-LAST:event_btnguardarsemestreActionPerformed
 
     private void btnguardarmateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarmateriaActionPerformed
         Materia mat = new Materia(0, txtnommateria.getText(), txtobservaciones.getText(), txtabreviacion.getText(), txtprofesor.getText(), Integer.parseInt(txtcreditos.getText()), true);
         Connection con = Conexiones.conectar();
         PreparedStatement ps;
         ResultSet rs;
-        try {
+        try
+        {
             ps = con.prepareStatement("INSERT INTO cat_materia (nombre,observaciones,bactive,abreviatura,creditos,profesor) VALUES (?,?,?,?,?,?)");//por seguridad
             ps.setString(1, mat.getNombre());
             ps.setString(2, mat.getObservaciones());
@@ -471,242 +649,96 @@ public class vtnAMateria extends javax.swing.JFrame {
             ps.setInt(5, mat.getCreditos());  // agregar un registro
             ps.setString(6, mat.getProfesor());
             int res = ps.executeUpdate();
-
-            if (res > 0) {
+            
+            if (res > 0)
+            {
                 JOptionPane.showMessageDialog(null, "Se registro exitosamente");
-            } else {
+            } else
+            {
                 JOptionPane.showMessageDialog(null, "ERROR");
             }
-
+            
             con.close();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             System.out.println(e.toString());
         }
     }//GEN-LAST:event_btnguardarmateriaActionPerformed
 
-    private void btnguardareticulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardareticulaActionPerformed
-        Connection con = Conexiones.conectar();
-        PreparedStatement ps;
-        ResultSet rs;
-
-        try {
-
-            ps = con.prepareStatement("SELECT id_materia FROM cat_materia WHERE nombre=?");
-            ps.setString(1, jcmateria.getSelectedItem().toString());
-            rs = ps.executeQuery();
-            int x = 0;
-            if (rs.next()) {
-                x = rs.getInt("id_materia");
-            }
-            ps = con.prepareStatement("INSERT INTO ctrl_reticula(id_semestre,id_materia,parcial1,parcial2,ordinario,extra,titulo) VALUES (?,?,?,?,?,?,?)");//por seguridad
-            ps.setInt(1, Integer.parseInt(txtsemestre.getText()));
-            ps.setInt(2, x);
-            ps.setInt(3, 0);
-            ps.setInt(4, 0);
-            ps.setInt(5, 0);
-            ps.setInt(6, 0);
-            ps.setInt(7, 0);
-            int res = ps.executeUpdate();
-
-            if (res > 0) {
-                JOptionPane.showMessageDialog(null, "Se registro exitosamente");
-            } else {
-                JOptionPane.showMessageDialog(null, "ERROR");
-            }
-
-            con.close();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-    }//GEN-LAST:event_btnguardareticulaActionPerformed
-
-    private void btnguardarsemestreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarsemestreActionPerformed
-        Connection con = Conexiones.conectar();
-        PreparedStatement ps;
-        ResultSet rs;
-        try {
-            ps = con.prepareStatement("INSERT INTO ctrl_semestre (id_periodo,id_anio,bactive,id_usuario,id_semestre) VALUES (?,?,?,?,?)");//por seguridad
-            ps.setInt(1, extraeid(String.valueOf(jcperiodo.getSelectedItem()), 2));
-            ps.setInt(2, extraeid(String.valueOf(jcanio.getSelectedItem()), 1));
-            ps.setBoolean(3, true);
-            ps.setInt(4, vtnLogin.id);
-            ps.setInt(5, extraeid(String.valueOf(jcsemestre.getSelectedItem()), 3));
-
-            int res = ps.executeUpdate();
-            if (res > 0) {
-                JOptionPane.showMessageDialog(null, "Se registro exitosamente");
-                cargaMateria();
-            } else {
-                JOptionPane.showMessageDialog(null, "ERROR");
-            }
-            con.close();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-    }//GEN-LAST:event_btnguardarsemestreActionPerformed
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        cargaMateria();
-        cargaAnio();
-        cargaPeriodo();
-        CrearModelo2();
-        cargasemestre();
-        PreparedStatement ps = null;
-        ResultSet rs;
-        Connection con = Conexiones.conectar();
-
-        try {
-            String sql = "Select nombre,abreviatura,profesor,creditos,observaciones FROM cat_materia";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-
-            ResultSetMetaData rrsw = rs.getMetaData();
-            int cantcolumnas = rrsw.getColumnCount();
-
-            while (rs.next()) {
-
-                Object[] filas = new Object[cantcolumnas];
-
-                for (int i = 0; i < cantcolumnas; i++) {
-                    filas[i] = rs.getObject(i + 1);
-                }
-                modelo2.addRow(filas);
-            }
-
-            int tamanio = jtmateria.getModel().getRowCount();
-            for (int i = 0; i < tamanio; i++) {
-                jtmateria.getModel().setValueAt(false, i, 5);
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-        }
-
-
-    }//GEN-LAST:event_formWindowOpened
-
-    private void btnguardasemmatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardasemmatActionPerformed
-        int id_ctrlsemestre = -1;
-//        System.out.println(String.valueOf(jtmateria.getModel().getValueAt(1, 5)));
-//        System.out.println(jtmateria.getModel().getRowCount());
-        int tamanio = jtmateria.getModel().getRowCount();
-
-        if (tamanio == 0) {
-            Mensaje.error(this, "No se encuentran datos");
-        } else {
-          try {
-            for (int i = 0; i < tamanio; i++) {
-                if ((Boolean) jtmateria.getModel().getValueAt(i, 5)) {
-                    PreparedStatement ps;
-                    ResultSet rs;
-                    
-                        Connection con = Conexiones.conectar();
-                        ps = con.prepareStatement("SELECT id_ctrlsemestre FROM ctrl_semestre WHERE id_semestre = ?");
-                        ps.setInt(1, Integer.parseInt((String) jcsemestremat.getSelectedItem()));
-                        rs = ps.executeQuery();
-
-                        if (rs.next()) {
-                            id_ctrlsemestre = rs.getInt("id_ctrlsemestre");
-                            //System.out.println("ID CTRLSEMESTRE" + x);
-                        }
-
-                        ps = vtnPrincipal.con.prepareStatement("INSERT INTO ctrl_semestremateria  (id_ctrlsemestre,id_materia,parcial1,parcial2,ordinario"
-                                + ",extra,titulo,tipo_aprovacion) VALUES (?,?,?,?,?,?,?,?)");//por seguridad
-                        ps.setInt(1, id_ctrlsemestre);
-                        ps.setInt(2, extraeid(String.valueOf(jtmateria.getModel().getValueAt(i, 0)), 4));
-                        ps.setInt(3, 0);
-                        ps.setInt(4, 0);
-                        ps.setInt(5, 0);
-                        ps.setInt(6, 0);
-                        ps.setInt(7, 0);
-                        ps.setInt(8, 2);
-                        int res = ps.executeUpdate();
-                        if (res > 0) {
-                            JOptionPane.showMessageDialog(null, "Se registro exitosamente");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "ERROR");
-                        }
-                        
-                    
-
-                }
-
-            }
-            vtnPrincipal.con.close();
-            } catch (Exception e) {
-                        System.out.println(e.toString());
-                    }
-        }
-
-
-    }//GEN-LAST:event_btnguardasemmatActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        System.out.println(String.valueOf(jtmateria.getModel().getValueAt(0, 0)));
-        System.out.println(extraeid(String.valueOf(jtmateria.getModel().getValueAt(0, 0)), 4));
-        //System.out.println(extraeid(String.valueOf(jcsemestre.getSelectedItem()), 3));
-//        System.out.println("IDUSUARIO" + vtnLogin.id);
-//        for (int i = 0; i < materia.size(); i++) {
-//            System.out.println("ID: " + materia.get(i).getId() + "\nNOMBRE: " + materia.get(i).getNombre());
-//        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void CrearModelo2() {
-        try {
-            modelo2 = (new DefaultTableModel(
-                    null, new String[]{
-                        "Nombre", "Abreviatura",
-                        "Profesor", "creditos", "observaciones", "aceptar"}) {
-                Class[] types = new Class[]{
-                    java.lang.Object.class,
-                    java.lang.Object.class,
-                    java.lang.Object.class,
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        
+    }//GEN-LAST:event_formWindowClosed
+    
+    private void CrearModelo2()
+    {
+        try
+        {
+            modelo = (new DefaultTableModel(
+                    null, new String[]
+                    {
+                        "Nombre", "creditos", "aceptar"
+                    })
+            {
+                Class[] types = new Class[]
+                {
                     java.lang.Object.class,
                     java.lang.Object.class,
                     java.lang.Boolean.class
                 };
-                boolean[] canEdit = new boolean[]{
-                    false, false, false, false, false, true
+                boolean[] canEdit = new boolean[]
+                {
+                    false, false, true
                 };
-
+                
                 @Override
-                public Class getColumnClass(int columnIndex) {
+                public Class getColumnClass(int columnIndex)
+                {
                     return types[columnIndex];
                 }
-
+                
                 @Override
-                public boolean isCellEditable(int rowIndex, int colIndex) {
+                public boolean isCellEditable(int rowIndex, int colIndex)
+                {
                     return canEdit[colIndex];
                 }
             });
-            jtmateria.setModel(modelo2);
-        } catch (Exception e) {
+            jtmateria.setModel(modelo);
+        } catch (Exception e)
+        {
             JOptionPane.showMessageDialog(null, e.toString() + "error2");
         }
     }
-
-    public void cargaMateria() {
-        try {
-            jcmateria.removeAllItems();
+    
+    public void cargaMateria()
+    {
+        try
+        {
+            //    jcmateria.removeAllItems();
+            materia.clear();
             PreparedStatement ps = null;
             ResultSet rs;
             String sql = "Select id_materia,nombre FROM cat_materia";
             Connection con = Conexiones.conectar();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while (rs.next()) {
+            while (rs.next())
+            {
                 materia.add(new Materia(rs.getInt("id_materia"), rs.getString("nombre")));
-                jcmateria.addItem(String.valueOf(rs.getObject("nombre")));
+                //      jcmateria.addItem(String.valueOf(rs.getObject("nombre")));
             }
-
-        } catch (SQLException e) {
+            
+        } catch (SQLException e)
+        {
             System.out.println(e.toString());
         }
     }
-
-    public void cargaAnio() {
-        try {
+    
+    public void cargaAnio()
+    {
+        try
+        {
             jcanio.removeAllItems();
+            anio.clear();
             PreparedStatement ps = null;
             ResultSet rs;
             String sql = "Select id_anio,anio FROM cat_anio";
@@ -715,129 +747,248 @@ public class vtnAMateria extends javax.swing.JFrame {
             rs = ps.executeQuery();
             ArrayList<Object> nombre = new ArrayList<Object>();
             int cont = 0;
-            while (rs.next()) {
+            while (rs.next())
+            {
                 System.out.println("contador" + cont++);
 //                System.out.println("Id"+(String)rs.getObject("id_anio"));
 //                System.out.println("Año"+(String) rs.getObject("anio"));
                 jcanio.addItem(String.valueOf(rs.getObject("anio")));
                 anio.add(new Año(rs.getInt("id_anio"), rs.getInt("anio")));
             }
-
-        } catch (SQLException e) {
+            
+        } catch (SQLException e)
+        {
             System.out.println(e.toString());
         }
     }
-
-    public void cargaPeriodo() {
-        try {
+    
+    public void cargaPeriodo()
+    {
+        try
+        {
             jcperiodo.removeAllItems();
+            periodo.clear();
             PreparedStatement ps = null;
             ResultSet rs;
             String sql = "Select id_periodo,periodo FROM cat_periodo";
             Connection con = Conexiones.conectar();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while (rs.next()) {
+            while (rs.next())
+            {
                 periodo.add(new Periodo(rs.getInt("id_periodo"), rs.getString("periodo")));
                 jcperiodo.addItem(String.valueOf(rs.getObject("periodo")));
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println(e.toString());
         }
     }
-
-    public void cargasemestre() {
-        try {
+    
+    public void cargasemestre()
+    {
+        try
+        {
             jcsemestre.removeAllItems();
-            jcsemestremat.removeAllItems();
+            semestre.clear();
             PreparedStatement ps = null;
             ResultSet rs;
             String sql = "Select id_semestre,numero FROM cat_semestre";
             Connection con = Conexiones.conectar();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while (rs.next()) {
-                semestre.add(new Semestre(rs.getInt("id_semestre"), rs.getInt("numero")));
+            while (rs.next())
+            {
+                semestre.add(new Semestre(rs.getString("numero"), rs.getInt("id_semestre")));
                 jcsemestre.addItem(String.valueOf(rs.getObject("numero")));
-                jcsemestremat.addItem(String.valueOf(rs.getObject("numero")));
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println(e.toString());
         }
     }
-
-    public int extraeid(Object dato, int anio1) {
-        if (anio1 == 1) {
-            for (int i = 0; i < anio.size(); i++) {
-                if (anio.get(i).getAnio() == Integer.parseInt((String) dato)) {
+    
+    public void cargactrlSemestre()
+    {
+        try
+        {
+            
+            jcsemestremat.removeAllItems();
+            PreparedStatement ps = null;
+            ResultSet rs;
+            String sql = "Select numero FROM ctrl_semestre inner join cat_semestre on ctrl_semestre.id_semestre = cat_semestre.id_semestre where id_usuario=?";
+            Connection con = Conexiones.conectar();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, vtnLogin.id);
+            rs = ps.executeQuery();
+            while (rs.next())
+            {
+                jcsemestremat.addItem(String.valueOf(rs.getObject("numero")));
+            }
+        } catch (SQLException e)
+        {
+            System.out.println(e.toString());
+        }
+    }
+    
+    public static int extraeid(Object dato, int anio1)
+    {
+        if (anio1 == 1)
+        {
+            for (int i = 0; i < anio.size(); i++)
+            {
+                if (anio.get(i).getAnio() == Integer.parseInt((String) dato))
+                {
+                    System.out.println("retornando año" + anio.get(i).getId());
                     return anio.get(i).getId();
                 }
             }
-        } else {
-            if (anio1 == 2) {
-                for (int i = 0; i < periodo.size(); i++) {
-                    if (periodo.get(i).getPeriodo().equals((String) dato)) {
+        } else
+        {
+            if (anio1 == 2)
+            {
+                for (int i = 0; i < periodo.size(); i++)
+                {
+                    if (periodo.get(i).getPeriodo().equals((String) dato))
+                    {
+                        System.out.println("retornando periodo" + periodo.get(i).getId());
                         return periodo.get(i).getId();
                     }
                 }
-            } else {
-                if (anio1 == 3) {
-                    for (int i = 0; i < semestre.size(); i++) {
-                        if (semestre.get(i).getSemestre() == Integer.parseInt((String) dato)) {
+            } else
+            {
+                if (anio1 == 3)
+                {
+                    for (int i = 0; i < semestre.size(); i++)
+                    {
+                        if (semestre.get(i).getSemestre().equals((String) dato))
+                        {
+                            System.out.println("retornando semestre" + semestre.get(i).getId());
                             return semestre.get(i).getId();
                         }
                     }
-                } else {
-                    if (anio1 == 4) {
-                        for (int i = 0; i < materia.size(); i++) {
-                            if (materia.get(i).getNombre().equals((String) dato)) {
+                } else
+                {
+                    if (anio1 == 4)
+                    {
+                        for (int i = 0; i < materia.size(); i++)
+                        {
+                            if (materia.get(i).getNombre().equals((String) dato))
+                            {
+                                System.out.println("retornando materia" + materia.get(i).getId());
                                 return materia.get(i).getId();
                             }
                         }
                     }
-
+                    
                 }
             }
         }
         return -1;
     }
-        /**
-         * @param args the command line arguments
-         */
-    public static void main(String args[]) {
+    
+    public void actualizatabla(){
+        int id_ctrlsemestre = -1;
+        //        System.out.println(String.valueOf(jtmateria.getModel().getValueAt(1, 5)));
+        //        System.out.println(jtmateria.getModel().getRowCount());
+        int tamanio = jtmateria.getModel().getRowCount();
+        
+        if (tamanio == 0)
+        {
+            Mensaje.error(this, "No se encuentran datos");
+        } else
+        {
+            try
+            {
+                for (int i = 0; i < tamanio; i++)
+                {
+                    if ((Boolean) jtmateria.getModel().getValueAt(i, 2))
+                    {
+                        PreparedStatement ps;
+                        ResultSet rs;
+                        
+                        Connection con = Conexiones.conectar();
+                        ps = con.prepareStatement("SELECT id_ctrlsemestre FROM ctrl_semestre WHERE id_semestre = ? && id_usuario=?");
+                        ps.setInt(1, extraeid(String.valueOf(jcsemestremat.getSelectedItem()), 3));
+                        ps.setInt(2, vtnLogin.id);
+                        rs = ps.executeQuery();
+                        if (rs.next())
+                        {
+                            id_ctrlsemestre = rs.getInt("id_ctrlsemestre");
+                            System.out.println(id_ctrlsemestre);
+                            //System.out.println("ID CTRLSEMESTRE" + x);
+                        }
+                        
+                        ps = vtnPrincipal.con.prepareStatement("INSERT INTO ctrl_semestremateria  (id_ctrlsemestre,id_materia,parcial1,parcial2,ordinario"
+                                + ",extra,titulo,tipo_aprovacion,bactive) VALUES (?,?,?,?,?,?,?,?,?)");//por seguridad
+                        ps.setInt(1, id_ctrlsemestre);
+                        System.out.println("RETORNO DE MATERIA" + extraeid(String.valueOf(jtmateria.getModel().getValueAt(i, 0)), 4));
+                        ps.setInt(2, extraeid(String.valueOf(jtmateria.getModel().getValueAt(i, 0)), 4));
+                        ps.setInt(3, 0);
+                        ps.setInt(4, 0);
+                        ps.setInt(5, 0);
+                        ps.setInt(6, 0);
+                        ps.setInt(7, 0);
+                        ps.setInt(8, 1);
+                        ps.setBoolean(9, true);
+                        int res = ps.executeUpdate();
+                        
+                    }
+                }
+                //vtnPrincipal.con.close();
+            } catch (Exception e)
+            {
+                System.out.println("erororores" + e.toString());
+            }
+        }
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[])
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex)
+        {
             java.util.logging.Logger.getLogger(vtnAMateria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
+        } catch (InstantiationException ex)
+        {
             java.util.logging.Logger.getLogger(vtnAMateria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException ex)
+        {
             java.util.logging.Logger.getLogger(vtnAMateria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
             java.util.logging.Logger.getLogger(vtnAMateria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 new vtnAMateria().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnguardareticula;
     private javax.swing.JButton btnguardarmateria;
     private javax.swing.JButton btnguardarsemestre;
     private javax.swing.JButton btnguardasemmat;
@@ -845,14 +996,11 @@ public class vtnAMateria extends javax.swing.JFrame {
     private javax.swing.JButton btnlimpiar1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -861,13 +1009,11 @@ public class vtnAMateria extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JComboBox<String> jcanio;
-    private javax.swing.JComboBox<String> jcmateria;
     private javax.swing.JComboBox<String> jcperiodo;
     private javax.swing.JComboBox<String> jcsemestre;
     private javax.swing.JComboBox<String> jcsemestremat;
@@ -877,6 +1023,5 @@ public class vtnAMateria extends javax.swing.JFrame {
     private javax.swing.JTextField txtnommateria;
     private javax.swing.JTextArea txtobservaciones;
     private javax.swing.JTextField txtprofesor;
-    private javax.swing.JTextField txtsemestre;
     // End of variables declaration//GEN-END:variables
 }
