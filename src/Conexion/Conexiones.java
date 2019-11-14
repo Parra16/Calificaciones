@@ -58,7 +58,7 @@ public class Conexiones {
         return conn;
     }
     
-    public void desconectar(Connection con) throws SQLException{
+    public static void desconectar(Connection con) throws SQLException{
         con.close();
     }    
 }

@@ -9,8 +9,8 @@ import Objetos.Usuario;
 import Objetos.Carrera;
 import Conexion.Conexiones;
 import Objetos.Materia;
-import static Ventanas.vtnAMateria.carrera;
-import static Ventanas.vtnAMateria.materia;
+import static Ventanas.vtnPrincipal.carrera;
+import static Ventanas.vtnPrincipal.materia;
 import cjb.ci.Validaciones;
 import java.awt.Color;
 import java.sql.Connection;
@@ -234,14 +234,12 @@ public class vtnAUsuario extends javax.swing.JFrame {
         PreparedStatement ps;
         ResultSet rs;
         try{
-            ps=con.prepareStatement("INSERT INTO cat_usuario (usuario,contrasenia,semestre_actual,correo,carrera,tipo_usuario,bactive) VALUES (?,?,?,?,?,?,?)");//por seguridad
+            ps=con.prepareStatement("INSERT INTO cat_usuario (nombre_usuario,correo,contrasenia,semestre,carrera) VALUES (?,?,?,?,?)");//por seguridad
             ps.setString(1, usuario.getUsuario());
-            ps.setString(2, usuario.getContrasenia());
-            ps.setString(3, usuario.getSemestre());       // Codigo para insertar
-            ps.setString(4,usuario.getCorreo());  // agregar un registro
-            ps.setInt(5,usuario.getIdcarrera());  // agregar un registro
-            ps.setInt(6,1);  // agregar un registro
-            ps.setBoolean(7,true);  // agregar un registro
+            ps.setString(2,usuario.getCorreo());
+            ps.setString(3, usuario.getContrasenia());
+            ps.setString(4, usuario.getSemestre());       
+            ps.setInt(5,usuario.getIdcarrera());  
             int res=ps.executeUpdate();
             
             if (res>0) {
@@ -295,7 +293,7 @@ public class vtnAUsuario extends javax.swing.JFrame {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                carrera.add(new Carrera(rs.getInt("folio_carrera"), rs.getString("carrera"),rs.getString("abreviatura")));
+                carrera.add(new Carrera(rs.getInt("id_carrera"), rs.getString("carrera"),rs.getString("abreviatura")));
                 jccarrera.addItem(String.valueOf(rs.getObject("carrera")));
             }
 

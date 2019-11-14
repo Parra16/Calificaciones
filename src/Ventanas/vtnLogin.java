@@ -146,15 +146,13 @@ public class vtnLogin extends javax.swing.JFrame {
         ResultSet rs;
         try{
             con = Conexiones.conectar();
-            ps = con.prepareStatement("SELECT id_usuario,usuario,contrasenia FROM cat_usuario WHERE bactive = ? AND usuario = ? AND contrasenia = ?"); //traer un dato
-            ps.setBoolean(1, true);
-            ps.setString(2, txtusuario.getText());
-            ps.setString(3, txtcontra.getText());
-            
+            ps = con.prepareStatement("SELECT id_usuario,nombre_usuario,contrasenia FROM cat_usuario WHERE nombre_usuario = ? AND contrasenia = ?"); //traer un dato
+            ps.setString(1, txtusuario.getText());
+            ps.setString(2, txtcontra.getText());
             rs= ps.executeQuery();
             if (rs.next()) {
                 id=rs.getInt("id_usuario");
-                usuario=rs.getString("usuario");
+                usuario=rs.getString("nombre_usuario");
                 new vtnPrincipal().setVisible(true);
                 System.out.println("USUARIO"+usuario);
                 System.out.println("ID"+id);

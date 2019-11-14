@@ -7,11 +7,14 @@ package Ventanas;
 
 import Conexion.Conexiones;
 import Objetos.Año;
-import Objetos.Carrera;
 import Objetos.Materia;
 import Objetos.Periodo;
 import Objetos.Semestre;
-import Objetos.Usuario;
+import static Ventanas.vtnPrincipal.anio;
+import static Ventanas.vtnPrincipal.con;
+import static Ventanas.vtnPrincipal.materia;
+import static Ventanas.vtnPrincipal.periodo;
+import static Ventanas.vtnPrincipal.semestre;
 import cjb.ci.Mensaje;
 import java.awt.Color;
 import java.sql.Connection;
@@ -28,24 +31,17 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author PARRA
  */
-public class vtnAMateria extends javax.swing.JFrame
-{
+public class vtnAMateria extends javax.swing.JFrame {
 
     /**
      * Creates new form vtnAMateria
      */
-    public vtnAMateria()
-    {
+    public vtnAMateria() {
         initComponents();
         this.getContentPane().setBackground(Color.WHITE);
         this.setResizable(false);
     }
-    static ArrayList<Año> anio = new ArrayList<Año>();
-    static ArrayList<Periodo> periodo = new ArrayList<Periodo>();
-    static ArrayList<Semestre> semestre = new ArrayList<Semestre>();
-    static ArrayList<Materia> materia = new ArrayList<Materia>();
-    static ArrayList<Carrera> carrera = new ArrayList<Carrera>();
-    
+
     static DefaultTableModel modelo;
 
     /**
@@ -450,88 +446,109 @@ public class vtnAMateria extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        cargaMateria();
-        cargaAnio();
+        CargaComboanio();
         cargaPeriodo();
         CrearModelo2();
-        cargasemestre();
+        cargaComboSemestre();
         cargactrlSemestre();
-        actualizatabla();
-        PreparedStatement ps = null;
-        ResultSet rs;
-        Connection con = Conexiones.conectar();
-        
-        try
-        {
-            String sql = "Select nombre,abreviatura,profesor,creditos,observaciones FROM cat_materia";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            
-            ResultSetMetaData rrsw = rs.getMetaData();
-            int cantcolumnas = rrsw.getColumnCount();
-            
-            while (rs.next())
-            {
-                
-                Object[] filas = new Object[cantcolumnas];
-                
-                for (int i = 0; i < cantcolumnas; i++)
-                {
-                    filas[i] = rs.getObject(i + 1);
-                }
-                modelo.addRow(filas);
-            }
-            
-            int tamanio = jtmateria.getModel().getRowCount();
-            for (int i = 0; i < tamanio; i++)
-            {
-                jtmateria.getModel().setValueAt(false, i, 5);
-            }
-            
-        } catch (SQLException e)
-        {
-            System.out.println(e.toString());
-        }
         
 
-    }//GEN-LAST:event_formWindowOpened
-
-    private void jcsemestrematItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcsemestrematItemStateChanged
-        
         PreparedStatement ps = null;
         ResultSet rs;
-        Connection con = Conexiones.conectar();
         modelo.setRowCount(0);
-        try
-        {
-            String sql = "Select nombre,creditos FROM cat_materia inner join reticula on cat_materia.id_materia = reticula.id_materia where id_semestre=?";
+        try {
+            String sql = "Select nombre_materia,creditos FROM cat_materia inner join reticula on "
+                    + "cat_materia.id_materia = reticula.id_materia where id_semestre=?";
             ps = con.prepareStatement(sql);
             ps.setInt(1, extraeid(String.valueOf(jcsemestremat.getSelectedItem()), 3));
             rs = ps.executeQuery();
-            
+
             ResultSetMetaData rrsw = rs.getMetaData();
             int cantcolumnas = rrsw.getColumnCount();
-            
-            while (rs.next())
-            {
-                
+
+            while (rs.next()) {
+
                 Object[] filas = new Object[cantcolumnas];
-                
-                for (int i = 0; i < cantcolumnas; i++)
-                {
+
+                for (int i = 0; i < cantcolumnas; i++) {
                     filas[i] = rs.getObject(i + 1);
                 }
                 modelo.addRow(filas);
             }
-            
+
             int tamanio = jtmateria.getModel().getRowCount();
-            for (int i = 0; i < tamanio; i++)
-            {
+            for (int i = 0; i < tamanio; i++) {
                 jtmateria.getModel().setValueAt(false, i, 2);
             }
-            
-        } catch (SQLException e)
-        {
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jcsemestrematItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcsemestrematItemStateChanged
+
+        
+        
+        
+        
+        
+        PreparedStatement ps = null;
+        ResultSet rs;
+        
+//        try {
+//            String sql = "Select nombre,creditos FROM cat_materia";
+//            ps = con.prepareStatement(sql);
+//            rs = ps.executeQuery();
+//
+//            ResultSetMetaData rrsw = rs.getMetaData();
+//            int cantcolumnas = rrsw.getColumnCount();
+//
+//            while (rs.next()) {
+//
+//                Object[] filas = new Object[cantcolumnas];
+//
+//                for (int i = 0; i < cantcolumnas; i++) {
+//                    filas[i] = rs.getObject(i + 1);
+//                }
+//                modelo.addRow(filas);
+//            }
+//
+//            int tamanio = jtmateria.getModel().getRowCount();
+//            for (int i = 0; i < tamanio; i++) {
+//                jtmateria.getModel().setValueAt(false, i, 5);
+//            }
+//
+//        } catch (SQLException e) {
+//            System.out.println(e.toString());
+//        }
+        modelo.setRowCount(0);
+        try {
+            String sql = "Select nombre_materia,creditos FROM cat_materia inner join reticula on "
+                    + "cat_materia.id_materia = reticula.id_materia where id_semestre=?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, extraeid(String.valueOf(jcsemestremat.getSelectedItem()), 3));
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rrsw = rs.getMetaData();
+            int cantcolumnas = rrsw.getColumnCount();
+
+            while (rs.next()) {
+
+                Object[] filas = new Object[cantcolumnas];
+
+                for (int i = 0; i < cantcolumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+                }
+                modelo.addRow(filas);
+            }
+
+            int tamanio = jtmateria.getModel().getRowCount();
+            for (int i = 0; i < tamanio; i++) {
+                jtmateria.getModel().setValueAt(false, i, 2);
+            }
+
+        } catch (SQLException e) {
             System.out.println(e.toString());
         }
     }//GEN-LAST:event_jcsemestrematItemStateChanged
@@ -541,35 +558,27 @@ public class vtnAMateria extends javax.swing.JFrame
         //        System.out.println(String.valueOf(jtmateria.getModel().getValueAt(1, 5)));
         //        System.out.println(jtmateria.getModel().getRowCount());
         int tamanio = jtmateria.getModel().getRowCount();
-        
-        if (tamanio == 0)
-        {
+
+        if (tamanio == 0) {
             Mensaje.error(this, "No se encuentran datos");
-        } else
-        {
-            try
-            {
-                for (int i = 0; i < tamanio; i++)
-                {
-                    if ((Boolean) jtmateria.getModel().getValueAt(i, 2))
-                    {
+        } else {
+            try {
+                for (int i = 0; i < tamanio; i++) {
+                    if ((Boolean) jtmateria.getModel().getValueAt(i, 2)) {
                         PreparedStatement ps;
                         ResultSet rs;
-                        
-                        Connection con = Conexiones.conectar();
                         ps = con.prepareStatement("SELECT id_ctrlsemestre FROM ctrl_semestre WHERE id_semestre = ? && id_usuario=?");
                         ps.setInt(1, extraeid(String.valueOf(jcsemestremat.getSelectedItem()), 3));
                         ps.setInt(2, vtnLogin.id);
                         rs = ps.executeQuery();
-                        if (rs.next())
-                        {
+                        if (rs.next()) {
                             id_ctrlsemestre = rs.getInt("id_ctrlsemestre");
                             System.out.println(id_ctrlsemestre);
                             //System.out.println("ID CTRLSEMESTRE" + x);
                         }
-                        
-                        ps = vtnPrincipal.con.prepareStatement("INSERT INTO ctrl_semestremateria  (id_ctrlsemestre,id_materia,parcial1,parcial2,ordinario"
-                                + ",extra,titulo,tipo_aprovacion,bactive) VALUES (?,?,?,?,?,?,?,?,?)");//por seguridad
+
+                        ps = vtnPrincipal.con.prepareStatement("INSERT INTO ctrl_semestremateria  (id_ctrlsemestre,id_materia,parcial1,parcial2,ordinario_examen"
+                                + ",extra,titulo,tipo_aprovacion) VALUES (?,?,?,?,?,?,?,?)");//por seguridad
                         ps.setInt(1, id_ctrlsemestre);
                         System.out.println("RETORNO DE MATERIA" + extraeid(String.valueOf(jtmateria.getModel().getValueAt(i, 0)), 4));
                         ps.setInt(2, extraeid(String.valueOf(jtmateria.getModel().getValueAt(i, 0)), 4));
@@ -579,15 +588,14 @@ public class vtnAMateria extends javax.swing.JFrame
                         ps.setInt(6, 0);
                         ps.setInt(7, 0);
                         ps.setInt(8, 1);
-                        ps.setBoolean(9, true);
                         int res = ps.executeUpdate();
-                        
+
                     }
                 }
                 Mensaje.exito(this, "Semestre Generado");
+                vtnPrincipal.cargaTabla(null);
                 //vtnPrincipal.con.close();
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 System.out.println("erororores" + e.toString());
             }
         }
@@ -605,43 +613,33 @@ public class vtnAMateria extends javax.swing.JFrame
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnguardarsemestreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarsemestreActionPerformed
-        Connection con = Conexiones.conectar();
         PreparedStatement ps;
         ResultSet rs;
-        try
-        {
-            ps = con.prepareStatement("INSERT INTO ctrl_semestre (id_periodo,id_anio,id_usuario,id_semestre,bactive) VALUES (?,?,?,?,?)");//por seguridad
+        try {
+            ps = con.prepareStatement("INSERT INTO ctrl_semestre (id_periodo,id_anio,id_usuario,id_semestre) VALUES (?,?,?,?)");//por seguridad
             ps.setInt(1, periodo.get(jcperiodo.getSelectedIndex()).getId());
             ps.setInt(2, extraeid(String.valueOf(jcanio.getSelectedItem()), 1));
             ps.setInt(3, vtnLogin.id);
             ps.setInt(4, extraeid(String.valueOf(jcsemestre.getSelectedItem()), 3));
-            ps.setBoolean(5, true);
-            
             int res = ps.executeUpdate();
-            if (res > 0)
-            {
+            if (res > 0) {
                 JOptionPane.showMessageDialog(null, "Se registro exitosamente");
-            } else
-            {
+            } else {
                 JOptionPane.showMessageDialog(null, "ERROR");
             }
-            con.close();
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.toString());
         }
         cargactrlSemestre();
-        
+
     }//GEN-LAST:event_btnguardarsemestreActionPerformed
 
     private void btnguardarmateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarmateriaActionPerformed
         Materia mat = new Materia(0, txtnommateria.getText(), txtobservaciones.getText(), txtabreviacion.getText(), txtprofesor.getText(), Integer.parseInt(txtcreditos.getText()), true);
-        Connection con = Conexiones.conectar();
         PreparedStatement ps;
         ResultSet rs;
-        try
-        {
-            ps = con.prepareStatement("INSERT INTO cat_materia (nombre,observaciones,bactive,abreviatura,creditos,profesor) VALUES (?,?,?,?,?,?)");//por seguridad
+        try {
+            ps = con.prepareStatement("INSERT INTO cat_materia (nombre_materia,creditos,bactive) VALUES (?,?,?,?,?,?)");//por seguridad
             ps.setString(1, mat.getNombre());
             ps.setString(2, mat.getObservaciones());
             ps.setBoolean(3, mat.isBactive());       // Codigo para insertar
@@ -649,276 +647,192 @@ public class vtnAMateria extends javax.swing.JFrame
             ps.setInt(5, mat.getCreditos());  // agregar un registro
             ps.setString(6, mat.getProfesor());
             int res = ps.executeUpdate();
-            
-            if (res > 0)
-            {
+
+            if (res > 0) {
                 JOptionPane.showMessageDialog(null, "Se registro exitosamente");
-            } else
-            {
+            } else {
                 JOptionPane.showMessageDialog(null, "ERROR");
             }
-            
-            con.close();
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.toString());
         }
     }//GEN-LAST:event_btnguardarmateriaActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        
+
     }//GEN-LAST:event_formWindowClosed
-    
-    private void CrearModelo2()
-    {
-        try
-        {
+
+    private void CrearModelo2() {
+        try {
             modelo = (new DefaultTableModel(
-                    null, new String[]
-                    {
+                    null, new String[]{
                         "Nombre", "creditos", "aceptar"
-                    })
-            {
-                Class[] types = new Class[]
-                {
+                    }) {
+                Class[] types = new Class[]{
                     java.lang.Object.class,
                     java.lang.Object.class,
                     java.lang.Boolean.class
                 };
-                boolean[] canEdit = new boolean[]
-                {
+                boolean[] canEdit = new boolean[]{
                     false, false, true
                 };
-                
+
                 @Override
-                public Class getColumnClass(int columnIndex)
-                {
+                public Class getColumnClass(int columnIndex) {
                     return types[columnIndex];
                 }
-                
+
                 @Override
-                public boolean isCellEditable(int rowIndex, int colIndex)
-                {
+                public boolean isCellEditable(int rowIndex, int colIndex) {
                     return canEdit[colIndex];
                 }
             });
             jtmateria.setModel(modelo);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString() + "error2");
         }
     }
-    
-    public void cargaMateria()
-    {
-        try
-        {
-            //    jcmateria.removeAllItems();
-            materia.clear();
-            PreparedStatement ps = null;
-            ResultSet rs;
-            String sql = "Select id_materia,nombre FROM cat_materia";
-            Connection con = Conexiones.conectar();
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next())
-            {
-                materia.add(new Materia(rs.getInt("id_materia"), rs.getString("nombre")));
-                //      jcmateria.addItem(String.valueOf(rs.getObject("nombre")));
-            }
-            
-        } catch (SQLException e)
-        {
-            System.out.println(e.toString());
-        }
-    }
-    
-    public void cargaAnio()
-    {
-        try
-        {
+
+    public void CargaComboanio() {
+        try {
+
             jcanio.removeAllItems();
-            anio.clear();
+
             PreparedStatement ps = null;
             ResultSet rs;
             String sql = "Select id_anio,anio FROM cat_anio";
-            Connection con = Conexiones.conectar();
+
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            ArrayList<Object> nombre = new ArrayList<Object>();
             int cont = 0;
-            while (rs.next())
-            {
-                System.out.println("contador" + cont++);
-//                System.out.println("Id"+(String)rs.getObject("id_anio"));
-//                System.out.println("Año"+(String) rs.getObject("anio"));
+            while (rs.next()) {
                 jcanio.addItem(String.valueOf(rs.getObject("anio")));
-                anio.add(new Año(rs.getInt("id_anio"), rs.getInt("anio")));
             }
-            
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         }
     }
-    
-    public void cargaPeriodo()
-    {
-        try
-        {
+
+    public void cargaPeriodo() {
+        try {
             jcperiodo.removeAllItems();
-            periodo.clear();
+
             PreparedStatement ps = null;
             ResultSet rs;
             String sql = "Select id_periodo,periodo FROM cat_periodo";
             Connection con = Conexiones.conectar();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while (rs.next())
-            {
-                periodo.add(new Periodo(rs.getInt("id_periodo"), rs.getString("periodo")));
+            while (rs.next()) {
+
                 jcperiodo.addItem(String.valueOf(rs.getObject("periodo")));
             }
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         }
     }
-    
-    public void cargasemestre()
-    {
-        try
-        {
+
+    public void cargaComboSemestre() {
+        try {
             jcsemestre.removeAllItems();
-            semestre.clear();
             PreparedStatement ps = null;
             ResultSet rs;
-            String sql = "Select id_semestre,numero FROM cat_semestre";
-            Connection con = Conexiones.conectar();
+            String sql = "Select id_semestre,semestre FROM cat_semestre";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while (rs.next())
-            {
-                semestre.add(new Semestre(rs.getString("numero"), rs.getInt("id_semestre")));
-                jcsemestre.addItem(String.valueOf(rs.getObject("numero")));
+            while (rs.next()) {
+                jcsemestre.addItem(String.valueOf(rs.getObject("semestre")));
             }
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         }
     }
-    
-    public void cargactrlSemestre()
-    {
-        try
-        {
-            
+
+    public void cargactrlSemestre() {
+        try {
+
             jcsemestremat.removeAllItems();
             PreparedStatement ps = null;
             ResultSet rs;
-            String sql = "Select numero FROM ctrl_semestre inner join cat_semestre on ctrl_semestre.id_semestre = cat_semestre.id_semestre where id_usuario=?";
+            String sql = "Select semestre FROM ctrl_semestre inner join cat_semestre on ctrl_semestre.id_semestre = cat_semestre.id_semestre where id_usuario=?";
             Connection con = Conexiones.conectar();
             ps = con.prepareStatement(sql);
             ps.setInt(1, vtnLogin.id);
             rs = ps.executeQuery();
-            while (rs.next())
-            {
-                jcsemestremat.addItem(String.valueOf(rs.getObject("numero")));
+            while (rs.next()) {
+                jcsemestremat.addItem(String.valueOf(rs.getObject("semestre")));
             }
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         }
     }
-    
-    public static int extraeid(Object dato, int anio1)
-    {
-        if (anio1 == 1)
-        {
-            for (int i = 0; i < anio.size(); i++)
-            {
-                if (anio.get(i).getAnio() == Integer.parseInt((String) dato))
-                {
+
+    public static int extraeid(Object dato, int anio1) {
+        if (anio1 == 1) {
+            for (int i = 0; i < anio.size(); i++) {
+                if (anio.get(i).getAnio() == Integer.parseInt((String) dato)) {
                     System.out.println("retornando año" + anio.get(i).getId());
                     return anio.get(i).getId();
                 }
             }
-        } else
-        {
-            if (anio1 == 2)
-            {
-                for (int i = 0; i < periodo.size(); i++)
-                {
-                    if (periodo.get(i).getPeriodo().equals((String) dato))
-                    {
+        } else {
+            if (anio1 == 2) {
+                for (int i = 0; i < periodo.size(); i++) {
+                    if (periodo.get(i).getPeriodo().equals((String) dato)) {
                         System.out.println("retornando periodo" + periodo.get(i).getId());
                         return periodo.get(i).getId();
                     }
                 }
-            } else
-            {
-                if (anio1 == 3)
-                {
-                    for (int i = 0; i < semestre.size(); i++)
-                    {
-                        if (semestre.get(i).getSemestre().equals((String) dato))
-                        {
+            } else {
+                if (anio1 == 3) {
+                    for (int i = 0; i < semestre.size(); i++) {
+                        if (semestre.get(i).getSemestre().equals((String) dato)) {
                             System.out.println("retornando semestre" + semestre.get(i).getId());
                             return semestre.get(i).getId();
                         }
                     }
-                } else
-                {
-                    if (anio1 == 4)
-                    {
-                        for (int i = 0; i < materia.size(); i++)
-                        {
-                            if (materia.get(i).getNombre().equals((String) dato))
-                            {
+                } else {
+                    if (anio1 == 4) {
+                        for (int i = 0; i < materia.size(); i++) {
+                            if (materia.get(i).getNombre().equals((String) dato)) {
                                 System.out.println("retornando materia" + materia.get(i).getId());
                                 return materia.get(i).getId();
                             }
                         }
                     }
-                    
+
                 }
             }
         }
         return -1;
     }
-    
-    public void actualizatabla(){
+
+    public void actualizatabla() {
         int id_ctrlsemestre = -1;
         //        System.out.println(String.valueOf(jtmateria.getModel().getValueAt(1, 5)));
         //        System.out.println(jtmateria.getModel().getRowCount());
         int tamanio = jtmateria.getModel().getRowCount();
-        
-        if (tamanio == 0)
-        {
+
+        if (tamanio == 0) {
             Mensaje.error(this, "No se encuentran datos");
-        } else
-        {
-            try
-            {
-                for (int i = 0; i < tamanio; i++)
-                {
-                    if ((Boolean) jtmateria.getModel().getValueAt(i, 2))
-                    {
+        } else {
+            try {
+                for (int i = 0; i < tamanio; i++) {
+                    if ((Boolean) jtmateria.getModel().getValueAt(i, 2)) {
                         PreparedStatement ps;
                         ResultSet rs;
-                        
+
                         Connection con = Conexiones.conectar();
                         ps = con.prepareStatement("SELECT id_ctrlsemestre FROM ctrl_semestre WHERE id_semestre = ? && id_usuario=?");
                         ps.setInt(1, extraeid(String.valueOf(jcsemestremat.getSelectedItem()), 3));
                         ps.setInt(2, vtnLogin.id);
                         rs = ps.executeQuery();
-                        if (rs.next())
-                        {
+                        if (rs.next()) {
                             id_ctrlsemestre = rs.getInt("id_ctrlsemestre");
                             System.out.println(id_ctrlsemestre);
                             //System.out.println("ID CTRLSEMESTRE" + x);
                         }
-                        
+
                         ps = vtnPrincipal.con.prepareStatement("INSERT INTO ctrl_semestremateria  (id_ctrlsemestre,id_materia,parcial1,parcial2,ordinario"
                                 + ",extra,titulo,tipo_aprovacion,bactive) VALUES (?,?,?,?,?,?,?,?,?)");//por seguridad
                         ps.setInt(1, id_ctrlsemestre);
@@ -932,57 +846,47 @@ public class vtnAMateria extends javax.swing.JFrame
                         ps.setInt(8, 1);
                         ps.setBoolean(9, true);
                         int res = ps.executeUpdate();
-                        
+
                     }
                 }
                 //vtnPrincipal.con.close();
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 System.out.println("erororores" + e.toString());
             }
+
         }
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex)
-        {
+        } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(vtnAMateria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex)
-        {
+        } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(vtnAMateria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex)
-        {
+        } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(vtnAMateria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(vtnAMateria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
                 new vtnAMateria().setVisible(true);
             }
         });
